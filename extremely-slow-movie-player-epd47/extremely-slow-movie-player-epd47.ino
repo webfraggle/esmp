@@ -136,34 +136,16 @@ bool getImage(WiFiClient& client) {
               clength <<= 8;
               clength |= stream_byte;
               Serial.printf("\nfirst 4Bytes: %d %d \n",stream_byte,clength);
-              //continue;
               if (byte_counter == 5) stream_size = clength;
+              continue;
             }
             
             //Serial.printf("%d \n",stream_byte);
-            
-            //if(stream_bit == '!') {
-            //    read = false;
-            //    break;
-            //}
-            // insert into char array
-//            received_chars[bit_counter] = stream_bit;
-//            bit_counter++;
-//            // if 3 bits inserted into array, convert to int, cast as uint8_t, and insert into next slot of framebuffer
-//            if(bit_counter == 3 && fb_counter < (DISPLAY_WIDTH * DISPLAY_HEIGHT)/2) {
-//                framebuffer[fb_counter] = (uint8_t)atoi(received_chars);
-//                fb_counter++;
-//                bit_counter = 0;
-//            }
-              framebuffer[fb_counter] = (byte)stream_byte;
-              fb_counter++;
+            framebuffer[fb_counter] = (byte)stream_byte;
+            fb_counter++;
               
         }
         Serial.printf("\nFB Counter: %d \n",fb_counter);
-        //if(fb_counter < (DISPLAY_WIDTH * DISPLAY_HEIGHT)/2) {
-        //    Serial.println("Stream failed.");
-        //    return false;
-        //}
 
     } else {
         Serial.println();
