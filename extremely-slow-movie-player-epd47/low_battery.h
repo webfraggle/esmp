@@ -1,3 +1,4 @@
+;
 const uint32_t low_battery_width = 113;
 const uint32_t low_battery_height = 70;
 const uint8_t low_battery_data[(114*70)/2] = {
