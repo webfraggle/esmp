@@ -29,7 +29,7 @@ uint8_t *framebuffer;
 
 void setup() {
     start_time = millis();
-    Serial.begin(115200);
+    Serial.begin(230400);
 
     if (startWiFi() == WL_CONNECTED && setupTime() == true) {
         if ((current_hour >= WAKEUP_TIME && current_hour <= SLEEP_TIME)) {
@@ -123,7 +123,8 @@ bool getImage(WiFiClient& client) {
         unsigned long stream_size = 40000;
         unsigned long clength = 0;
 
-        while (stream.available() > 0 || fb_counter < stream_size) {
+        while (fb_counter < stream_size) {
+            //Serial.printf("%d %d\n",fb_counter, stream_size);
             if (stream.available() == 0) continue;
             // read next byte
             //Serial.printf("\navail: %d \n",stream.available());
@@ -136,7 +137,7 @@ bool getImage(WiFiClient& client) {
               clength <<= 8;
               clength |= stream_byte;
               Serial.printf("\nfirst 4Bytes: %d %d \n",stream_byte,clength);
-              if (byte_counter == 5) stream_size = clength;
+              if (byte_counter == 4) stream_size = clength-4;
               continue;
             }
             
