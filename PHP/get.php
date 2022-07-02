@@ -4,7 +4,7 @@ error_reporting(E_ERROR | E_WARNING | E_PARSE);
 $width = 960;
 $height = 540;
 
-$startnr = 300;
+$startnr = 127;
 $stopnr = 399;
 $digits = 6;
 
@@ -19,13 +19,17 @@ if ($confstr !== false)
 }
 file_put_contents("nr.serial",serialize($currentnumber));
 
-
-$filename = sprintf("bbb_img/bbb_%0".$digits."d.png", $currentnumber);
+// TODO: last image, ending picture
+//$filename = sprintf("bbb_img/bbb_%0".$digits."d.png", $currentnumber);
+$filename = sprintf("sw_ep3/sw3_%0".$digits."d.png", $currentnumber);
 
 $size = $width*$height*0.5;
 
 $im = imagecreatefrompng($filename);
 
+header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
+header("Cache-Control: post-check=0, pre-check=0", false);
+header("Pragma: no-cache");
 header('Content-Type: application/octet-stream');
 header('Content-Disposition: attachment; filename="pic.eink"');
 header("Content-length: $size");
