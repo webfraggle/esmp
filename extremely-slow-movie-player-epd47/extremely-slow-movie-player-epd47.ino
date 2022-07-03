@@ -137,7 +137,7 @@ bool getImage(WiFiClient& client) {
               clength <<= 8;
               clength |= stream_byte;
               Serial.printf("\nfirst 4Bytes: %d %d \n",stream_byte,clength);
-              if (byte_counter == 4) stream_size = clength-4;
+              if (byte_counter == 4) stream_size = clength;
               continue;
             }
             
