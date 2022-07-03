@@ -20,10 +20,10 @@ if ($confstr !== false)
 file_put_contents("nr.serial",serialize($currentnumber));
 
 // TODO: last image, ending picture
-//$filename = sprintf("bbb_img/bbb_%0".$digits."d.png", $currentnumber);
-$filename = sprintf("sw_ep3/sw3_%0".$digits."d.png", $currentnumber);
+$filename = sprintf("bbb_img/bbb_%0".$digits."d.png", $currentnumber);
+//$filename = sprintf("sw_ep3/sw3_%0".$digits."d.png", $currentnumber);
 
-$size = $width*$height*0.5;
+$size = $width*$height*0.5+4;
 
 $im = imagecreatefrompng($filename);
 
