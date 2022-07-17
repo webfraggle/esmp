@@ -15,6 +15,9 @@
 #include "epd_driver.h" // from https://github.com/Xinyuan-LilyGO/LilyGo-EPD47 library
 
 #include "env.h"
+#define BATT_PIN            36
+int vref = 1100;
+
 #include "default_picture.h"
 #include "low_battery.h"
 
@@ -42,7 +45,7 @@ void setup() {
             framebuffer = (uint8_t *)heap_caps_malloc(DISPLAY_WIDTH * DISPLAY_HEIGHT / 2, MALLOC_CAP_SPIRAM);
             memset(framebuffer, 0xFF, (DISPLAY_WIDTH * DISPLAY_HEIGHT)/2);
 
-            checkBattery();
+            String bat_string = checkBattery();
 
             WiFiClient client;
 
@@ -50,7 +53,7 @@ void setup() {
             int image_received = false;
             while (attempt < 3  && !image_received) {
                 attempt++;
-                image_received = getImage(client);
+                image_received = getImage(client, bat_string);
             }
             if(image_received) {
                 displayImage();
@@ -89,7 +92,7 @@ void sleep() {
 }
 
 
-bool getImage(WiFiClient& client) {
+bool getImage(WiFiClient& client, String bat_string) {
     Serial.println("Attempting to get image");
 
     // close connection before sending a new request
@@ -100,7 +103,10 @@ bool getImage(WiFiClient& client) {
     http.getStream().setTimeout(3000000);
     http.setConnectTimeout(3000000);
     http.setTimeout(3000000);
-    http.begin(TODAY_URL);
+    http.begin(TODAY_URL+"?val="+String(bat_string));
+
+    Serial.println(TODAY_URL+"?val="+String(bat_string));
+    
     int httpCode = http.GET();
 
     char snum[5];
@@ -251,10 +257,18 @@ boolean updateLocalTime() {
 }
 
 // check battery level and if 15% or less, display icon
-void checkBattery() {
+String checkBattery() {
     Serial.println("Checking battery level");
+
+    delay(10); // Make adc measurement more accurate
+    uint16_t v = analogRead(BATT_PIN);
+    float voltage = ((float)v / 4095.0) * 2.0 * 3.3 * (vref / 1000.0);
+    //String bat_voltage = "➸ Voltage: " + String(battery_voltage) + "V";
+    //Serial.println(bat_voltage);
+    //return;
+    
     uint8_t percentage = 100;
-    float voltage = analogRead(35) / 4096.0 * 7.46;
+    //float voltage = analogRead(35) / 4096.0 * 7.46;
     if (voltage > 1 ) {
         Serial.println("Voltage = " + String(voltage));
         percentage = 2836.9625 * pow(voltage, 4) - 43987.4889 * pow(voltage, 3) + 255233.8134 * pow(voltage, 2) - 656689.7123 * voltage + 632041.7303;
@@ -271,4 +285,5 @@ void checkBattery() {
             epd_draw_grayscale_image(area, (uint8_t *) low_battery_data);
         }
     }
+    return String(voltage)+"-"+String(percentage);
 }
