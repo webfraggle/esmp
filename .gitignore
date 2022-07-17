@@ -1,3 +1,6 @@
 env.h
 default_picture.h
 nr.serial
+PHP/config.inc.php
+PHP/config-*.inc.php
+PHP/values.txt

@@ -1,32 +1,22 @@
 <?php
-/***********************++
- * Version which calculates the current picture between a start and en date
- */
-
-
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
+error_reporting(E_ERROR | E_PARSE);
 
 include_once 'config.inc.php';
 
-$currentdate = time();
-$position = ($currentdate-$startdate)/($stopdate-$startdate);
-$currentnumber = round($startnr+(($stopnr-$startnr)*$position));
+$confstr = file_get_contents($conffile);
+if ($confstr !== false)
+{
+    $currentnumber = unserialize($confstr);
+    $currentnumber++;
 
-// $currentdate = strtotime("2022-09-30");
-// print($startdate);
-// print("\n");-
-// print($stopdate);
-// print("\n");
-// print($currentdate);
-// print("\n");
-// print($position);
-// print("\n");
-// print($currentnumber);
-// print("\n");
-// exit;
-include_once 'savevalue.inc.php';
+} else {
+    $currentnumber = $startnr;
+}
+
+# restart
+if ($currentnumber > $stopnr) $currentnumber = $startnr;
+
+file_put_contents("nr.serial",serialize($currentnumber));
 
 $filename = sprintf($filenamepattern, $currentnumber);
 
@@ -34,13 +24,7 @@ $size = $width*$height*0.5;
 
 $im = imagecreatefrompng($filename);
 
-if (isset($_GET['png']))
-{
-    header('Content-Type: image/png');
-    imagepng($im);
-    exit;
-}
-
+include_once 'savevalue.inc.php';
 
 header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
 header("Cache-Control: post-check=0, pre-check=0", false);
@@ -74,6 +58,4 @@ for ($x=0; $x < $width; $x+=2) {
     }
 }
 //print "!";
-
-imagedestroy($im);
 ?>
