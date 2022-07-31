@@ -7,6 +7,8 @@ After every request it increases the framenumber.
 
 So a 90 minutes movie (24fps) is played in 450 days if the frame changes every 5 minutes.
 
+I also added a PHP-script where a start and an end date can be configured. So it is possible to play a movie until a fixed date. And it is possible to save battery because of not loading images at night.
+
 This script can also easily modified to realise a picture display for the EPD47.
 
 ![ESMP Front](esmp-front-wide-1024.jpg?raw=true "ESMP Front")
