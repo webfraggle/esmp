@@ -1,6 +1,7 @@
 <?php
 /***********************++
- * Version which calculates the current picture between a start and en date
+ * Version which gets only one picture
+ * 
  */
 
 
@@ -10,7 +11,7 @@ error_reporting(E_ALL);
 
 include_once 'config.inc.php';
 
-$currentnumber = 29714;
+$currentnumber = 3620;
 
 $filename = sprintf($filenamepattern, $currentnumber);
 
