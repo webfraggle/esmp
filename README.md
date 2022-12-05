@@ -35,6 +35,8 @@ At the end I used a palette.png with a linear 16 color grayscale palette.
 If you have a widescreen movie, you can additionally crop the frames:
 ffmpeg -i "MyRippedMovie1920x816.mp4" -i palette.png -filter_complex "[0:v]crop=1451:816,scale=960:540,hue=s=0,curves=all='0/0.0 0.25/0.27 0.5/0.5 0.75/0.67 1/1'[v];[v][1]paletteuse" 'img/movie_%06d.png'
 
+ffmpeg -i "MyRippedMovie1920x816.mp4" -i palette.png -filter_complex "[0:v]crop=1451:816,scale=960:540,hue=s=0,curves=all='0/0.0 0.1/0.15 0.2/0.4 0.5/0.7 0.75/0.9 1/1'[v];[v][1]paletteuse" 'img2/movie_%06d.png'
+
 # Credits
 Initial code is from https://github.com/travisvesbach/picture-display-epd47
 
